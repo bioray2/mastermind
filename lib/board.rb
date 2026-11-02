@@ -1,5 +1,6 @@
 class Board
-  def initialize(array)
+  def initialize(array, count)
+      @count = count
       @user_sequence = array
       @computer_sequence = []
       @return = []
@@ -7,7 +8,7 @@ class Board
 
   def generate_sequence
     until @computer_sequence.length >= 4 do
-      case rand(1...6)
+      case rand(1..6)
       when 1
         @computer_sequence << "green"
       when 2
@@ -26,6 +27,7 @@ class Board
 
   def compare
     i = 0
+    @return.clear
     4.times do |count|
       if @computer_sequence[i] == @user_sequence[i]
         @return << '[Good]'
@@ -36,6 +38,27 @@ class Board
       end
       i += 1
     end
+    @user_sequence.clear
     puts @return.join(' ')
+  end
+
+  def outcome
+    if @return.all? {|color| color == '[Good]'}
+      puts "You Win!"
+      reset
+      return true
+    elsif @count >= 12
+      puts "You Lose!" 
+      reset
+      return false
+    end
+    false
+  end
+
+  def reset
+    @user_sequence.clear
+    @return.clear
+    @computer_sequence.clear
+    @count = 0
   end
 end
